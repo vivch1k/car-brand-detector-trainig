@@ -17,7 +17,7 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
     return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
 
-def train_steps(model: nn.Module, 
+def train_steps(model: torch.nn.Module, 
                 train_dataloader: torch.utils.data.DataLoader, 
                 eval_metric: torchmetrics.Metric, 
                 optimizer: torch.optim.Optimizer, 
@@ -51,7 +51,7 @@ def train_steps(model: nn.Module,
     return train_loss, train_acc
 
 
-def test_steps(model: nn.Module,
+def test_steps(model: torch.nn.Module,
                test_dataloader: torch.utils.data.DataLoader,
                eval_metric: torchmetrics.Metric,
                device: torch.device):
@@ -78,7 +78,7 @@ def test_steps(model: nn.Module,
     return test_loss, test_acc
 
 
-def train(model: nn.Module,
+def train(model: torch.nn.Module,
           train_dataloader: torch.utils.data.DataLoader,
           test_dataloader: torch.utils.data.DataLoader,
           eval_metric: torchmetrics.Metric,
@@ -122,3 +122,27 @@ def train(model: nn.Module,
         torch.save(checkpoint, f"models/fine-tuning/vit_car_{epoch+1}e_unfreeze-4.pth")       
         
     return results
+
+
+def eval_model(model: torch.nn.Module,
+               test_dataloader: torch.utils.data.DataLoader,
+               device: torch.device="cpu"):
+    pred_labels = []
+    pred_probs = []
+    
+    model.eval()
+    with torch.inference_mode():
+        for batch in test_dataloader:
+            batch = {k: v.to(device) for k, v in batch.items()}
+            
+            output = model(**batch)
+            probs = torch.max(torch.softmax(output.logits, dim=1), dim=1)[0]
+            labels = torch.argmax(output.logits, dim=1)
+            
+            pred_labels.append(labels)
+            pred_probs.append(probs)
+
+    pred_labels = torch.cat(pred_labels, dim=0)
+    pred_probs = torch.cat(pred_probs, dim=0)
+
+    return pred_labels, pred_labels
