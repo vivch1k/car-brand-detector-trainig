@@ -114,4 +114,11 @@ def train(model: nn.Module,
               f"Trian loss: {train_loss:.4f}, Train accuracy: {train_acc:.4f} |",
               f"Test loss: {test_loss:.4f}, Test accuracy: {test_acc:.4f}")
         
+        checkpoint = {
+            "epoch": epoch+1,
+            "model_state": model.state_dict(),
+            "optimizer_state": optimizer.state_dict(),
+        }
+        torch.save(checkpoint, f"models/fine-tuning/vit_car_{epoch+1}e_unfreeze-4.pth")       
+        
     return results
