@@ -1,4 +1,4 @@
-data
-notebook
-models
+/data
+notebooks
+/models
 src/__pycache__

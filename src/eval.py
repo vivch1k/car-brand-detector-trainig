@@ -6,8 +6,8 @@ from torchmetrics import Accuracy, ConfusionMatrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from data_setup import create_dataloaders
-from engine import eval_model
+from data.data_setup import create_dataloaders
+from models.engine import eval_model
 
 test_path = "data/val"
 BATCH_SIZE = 64

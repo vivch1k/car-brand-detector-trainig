@@ -5,8 +5,8 @@ from torchvision import transforms
 from torchmetrics import Accuracy
 import numpy as np
 
-from engine import train
-from data_setup import create_dataloaders
+from models.engine import train
+from data.data_setup import create_dataloaders
 from utils import set_seeds
 
 
@@ -76,4 +76,4 @@ if __name__ == "__main__":
                     warmup_steps=3*len(train_dataloader),
                     device=device)
     
-    np.save("models/fine-tuning_results_vit_car_50e_unfreeze-4.npy", results)
+    np.save("outputs/training_results/fine-tuning_results_vit_car_50e_unfreeze-4.npy", results)
