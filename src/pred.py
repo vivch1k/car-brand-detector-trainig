@@ -1,17 +1,12 @@
 import torch
-import numpy as np
-from PIL import Image
-from torchvision import transforms
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 from pathlib import Path
-import matplotlib.pyplot as plt
-import os
 
 from models.inference import img_prediction
 
 data_test_path = Path("data/img_for_test")
 img_name = "ford.jpg"
-img_path = data_path / img_name
+img_path = data_test_path / img_name
 class_names = ['acura', 'aston martin', 'audi',
                'bentley', 'bmw', 'buick', 'byd',
                'cadillac', 'chevrolet', 'chrysler',
@@ -43,6 +38,7 @@ if __name__ == "__main__":
     prob, label = img_prediction(img_path,
                                  model,
                                  processor)
+    
     print(f"Prob: {prob:.2f}",
           f"Label: {label}",
           f"Class: {class_names[label]}")
